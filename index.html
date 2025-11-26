@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фінансовий результат УЗЕ</title>
+
+    <link rel="icon" type="image/png" href="img/img.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Password Modal -->
+    <div id="passwordModal" class="password-overlay">
+        <div class="password-card">
+            <div class="password-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h3>Доступ обмежено</h3>
+            <p>Введіть пароль для перегляду фінансових показників</p>
+            <div class="password-input-group">
+                <input type="password" id="passwordInput" placeholder="Введіть пароль">
+                <button id="passwordSubmit"><i class="fas fa-arrow-right"></i></button>
+            </div>
+            <p id="passwordError" class="password-error">Невірний пароль</p>
+        </div>
+    </div>
+
+    <div id="appContainer" class="app-blur">
+        <div class="header-bar">
+        <h2 style="margin:0;"><i class="fas fa-chart-line" style="color: var(--accent-blue);"></i> Фінансовий результат УЗЕ</h2>
+        <div class="header-right">
+            <div class="period-selector">
+                <label>Період:</label>
+                <select id="monthSelect" class="card-select">
+                    <option value="current">Поточний місяць</option>
+                    <option value="previous">Минулий місяць</option>
+                </select>
+            </div>
+            <div id="lastUpdated" class="last-updated-badge" style="display: none;">
+                <i class="fas fa-clock"></i> Дані до: <span id="lastUpdatedTime"></span>
+            </div>
+            <div id="loadingStatus" class="loading-spinner" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i> Завантаження даних...
+            </div>
+            <button id="themeToggle" class="theme-toggle" title="Перемкнути тему">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-section">
+        <div class="summary-card total-profit">
+            <div class="summary-icon"><i class="fas fa-wallet"></i></div>
+            <div class="summary-info">
+                <span class="summary-label">Загальний прибуток</span>
+                <span class="summary-value" id="totalProfit">0</span>
+                <span class="summary-unit">млн. грн</span>
+            </div>
+        </div>
+        <div class="summary-card best-station">
+            <div class="summary-icon"><i class="fas fa-trophy"></i></div>
+            <div class="summary-info">
+                <span class="summary-label">Найкращий результат</span>
+                <span class="summary-value" id="bestStation">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboardGrid" class="grid-container">
+    </div>
+
+    <footer class="page-footer">
+        Створено відділом агрегації KNESS Energy
+    </footer>
+
+    <!-- DETAIL MODAL -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle" style="margin:0;">Деталі</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="detailChart"></canvas>
+            </div>
+            <div class="modal-stats" id="modalStats">
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript modules -->
+    <script src="js/config.js"></script>
+    <script src="js/parser.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/main.js"></script>
+    </div>
+</body>
+
+</html>
