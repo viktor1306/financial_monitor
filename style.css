@@ -187,8 +187,17 @@ body.light-theme {
 /* Grid Container */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
     gap: 25px;
+    transition: all 0.3s ease;
+}
+
+.grid-container.size-medium {
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+}
+
+.grid-container.size-large {
+    grid-template-columns: repeat(auto-fill, minmax(800px, 1fr));
 }
 
 /* Card Styles */

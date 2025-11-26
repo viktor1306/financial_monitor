@@ -4,9 +4,42 @@
 document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();
     initPeriodSelector();
+    initSizeSelector();
     initModalHandlers();
     initPasswordProtection();
 });
+
+function initSizeSelector() {
+    const sizeSelect = document.getElementById('sizeSelect');
+    const grid = document.getElementById('dashboardGrid');
+    
+    // Load saved size or default to medium
+    const savedSize = localStorage.getItem('cardSize') || 'medium';
+    sizeSelect.value = savedSize;
+    updateGridSize(savedSize);
+    
+    sizeSelect.addEventListener('change', (e) => {
+        const size = e.target.value;
+        updateGridSize(size);
+        localStorage.setItem('cardSize', size);
+    });
+    
+    function updateGridSize(size) {
+        grid.classList.remove('size-medium', 'size-large');
+        grid.classList.add(`size-${size}`);
+        
+        // Trigger resize for charts after transition
+        setTimeout(() => {
+            if (window.miniCharts) {
+                Object.values(window.miniCharts).forEach(chart => {
+                    if (chart && typeof chart.resize === 'function') {
+                        chart.resize();
+                    }
+                });
+            }
+        }, 350);
+    }
+}
 
 function initPasswordProtection() {
     const modal = document.getElementById('passwordModal');
