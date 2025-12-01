@@ -170,21 +170,6 @@ function initThemeToggle() {
 function initPeriodSelector() {
     const monthSelect = document.getElementById('monthSelect');
     
-    // Set month names
-    const now = new Date();
-    const currentMonth = now.toLocaleString('uk-UA', { month: 'long', year: 'numeric' });
-    const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const prevMonth = prevDate.toLocaleString('uk-UA', { month: 'long', year: 'numeric' });
-    
-    // Capitalize first letter
-    const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1);
-    
-    const options = monthSelect.options;
-    if (options.length >= 2) {
-        options[0].text = capitalize(currentMonth);
-        options[1].text = capitalize(prevMonth);
-    }
-    
     monthSelect.addEventListener('change', (e) => {
         currentPeriod = e.target.value;
         renderDashboard();

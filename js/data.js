@@ -42,6 +42,29 @@ function processData() {
         stationsData[station].daily = Array.from(dataMap.values())
             .sort((a, b) => a.date - b.date);
     });
+
+    // Extract available months
+    const uniqueMonths = new Set();
+    Object.values(stationsData).forEach(station => {
+        station.daily.forEach(entry => {
+            if (entry.date) {
+                const monthKey = `${entry.date.getFullYear()}-${String(entry.date.getMonth() + 1).padStart(2, '0')}`;
+                uniqueMonths.add(monthKey);
+            }
+        });
+    });
+    
+    const sortedMonths = Array.from(uniqueMonths).sort().reverse().map(key => {
+        const [year, month] = key.split('-');
+        const date = new Date(parseInt(year), parseInt(month) - 1, 1);
+        const label = date.toLocaleString('uk-UA', { month: 'long', year: 'numeric' });
+        return {
+            id: key,
+            label: label.charAt(0).toUpperCase() + label.slice(1)
+        };
+    });
+    
+    updatePeriodSelector(sortedMonths);
     
     renderDashboard();
 }
@@ -52,18 +75,21 @@ function getFilteredData(stationData) {
     
     let startDate, endDate;
     
-    if (currentPeriod === 'current') {
-        // Current month: from 1st to last day with real data
-        startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-        endDate = today;
-    } else if (currentPeriod === 'all') {
+    if (currentPeriod === 'all') {
         // All time
         startDate = new Date(2020, 0, 1); // Start from 2020
         endDate = today;
     } else {
-        // Previous month
-        startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-        endDate = new Date(today.getFullYear(), today.getMonth(), 0);
+        // Parse YYYY-MM
+        const [year, month] = currentPeriod.split('-').map(Number);
+        if (!isNaN(year) && !isNaN(month)) {
+             startDate = new Date(year, month - 1, 1);
+             endDate = new Date(year, month, 0);
+        } else {
+             // Fallback to current month if parsing fails
+             startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+             endDate = today;
+        }
     }
     
     // Filter by date range first
@@ -72,8 +98,11 @@ function getFilteredData(stationData) {
         return d >= startDate && d <= endDate;
     });
     
-    // For current period, find last day with real non-zero data
-    if (currentPeriod === 'current' && filtered.length > 0) {
+    // For current month (if selected), find last day with real non-zero data
+    // Check if selected period matches current month
+    const isCurrentMonth = currentPeriod === `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+    
+    if (isCurrentMonth && filtered.length > 0) {
         // Sort by date descending to find last valid day
         const sorted = [...filtered].sort((a, b) => b.date - a.date);
         

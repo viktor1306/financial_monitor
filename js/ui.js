@@ -175,3 +175,51 @@ function formatDate(date) {
         year: 'numeric'
     });
 }
+
+// Update period selector with available months
+function updatePeriodSelector(months) {
+    const select = document.getElementById('monthSelect');
+    
+    select.innerHTML = '';
+    
+    // Add month options
+    months.forEach(month => {
+        const option = document.createElement('option');
+        option.value = month.id; // "YYYY-MM"
+        option.textContent = month.label; // "Month YYYY"
+        select.appendChild(option);
+    });
+
+    const allOption = document.createElement('option');
+    allOption.value = 'all';
+    allOption.textContent = 'Весь час';
+    select.appendChild(allOption);
+    
+    // Determine which value to select
+    let valueToSelect = '';
+    
+    if (months.length > 0) {
+        // If currentPeriod is 'current' or 'previous', map it to the actual month
+        if (currentPeriod === 'current') {
+            valueToSelect = months[0].id;
+        } else if (currentPeriod === 'previous' && months.length > 1) {
+            valueToSelect = months[1].id;
+        } else if (currentPeriod === 'all') {
+            valueToSelect = 'all';
+        } else {
+            // It's already a specific month or invalid
+            valueToSelect = currentPeriod;
+        }
+        
+        // Verify if valueToSelect exists in options
+        const exists = Array.from(select.options).some(opt => opt.value === valueToSelect);
+        if (!exists) {
+            valueToSelect = months[0].id; // Default to latest
+        }
+    } else {
+        valueToSelect = 'all';
+    }
+    
+    select.value = valueToSelect;
+    currentPeriod = valueToSelect;
+}
