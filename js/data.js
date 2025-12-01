@@ -56,6 +56,10 @@ function getFilteredData(stationData) {
         // Current month: from 1st to last day with real data
         startDate = new Date(today.getFullYear(), today.getMonth(), 1);
         endDate = today;
+    } else if (currentPeriod === 'all') {
+        // All time
+        startDate = new Date(2020, 0, 1); // Start from 2020
+        endDate = today;
     } else {
         // Previous month
         startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
